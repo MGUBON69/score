@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบประเมินความพึงพอใจ</title>
+    <!-- คิมใช้ Tailwind CSS ผ่าน CDN เพื่อให้ UI สวยงามและจัดการง่ายโดยไม่ต้องเขียน CSS เองค่ะ -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* แต่งเติมลูกเล่นเล็กน้อยเวลาผู้ใช้กดเลือกคะแนน */
+        .radio-custom:checked + div {
+            background-color: #3b82f6; /* สีฟ้า Tailwind (blue-500) */
+            color: white;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <!-- Card Container -->
+    <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 w-full max-w-2xl">
+        
+        <!-- ส่วนที่ 1: โลโก้ (Header Logo) -->
+        <div class="text-center mb-8">
+            <!-- ชินอิจิสามารถนำ URL รูปโลโก้มาใส่ตรง src ได้เลยนะคะ -->
+            <img src="https://via.placeholder.com/150x50?text=YOUR+LOGO" alt="Company Logo" class="h-16 mx-auto object-contain">
+            <h1 class="text-2xl font-bold text-gray-800 mt-4">แบบประเมินความพึงพอใจ</h1>
+            <p class="text-gray-500 text-sm mt-2">ความคิดเห็นของคุณมีความสำคัญต่อเราในการพัฒนาบริการให้ดียิ่งขึ้น</p>
+        </div>
+
+        <!-- ส่วนที่ 2: ฟอร์มประเมิน -->
+        <form id="surveyForm" class="space-y-6">
+            
+            <!-- คำถามข้อที่ 1 -->
+            <div>
+                <label class="block text-gray-700 font-medium mb-3">1. ความพึงพอใจในคุณภาพของบริการ</label>
+                <div class="flex justify-between md:justify-start md:space-x-4">
+                    <!-- ลูปสร้างปุ่มให้คะแนน 1-5 (ทำซ้ำรูปแบบนี้สำหรับข้ออื่น) -->
+                    <label class="cursor-pointer">
+                        <input type="radio" name="question1" value="1" class="radio-custom hidden" required>
+                        <div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center hover:border-blue-400 transition-colors">1</div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="question1" value="2" class="radio-custom hidden">
+                        <div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center hover:border-blue-400 transition-colors">2</div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="question1" value="3" class="radio-custom hidden">
+                        <div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center hover:border-blue-400 transition-colors">3</div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="question1" value="4" class="radio-custom hidden">
+                        <div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center hover:border-blue-400 transition-colors">4</div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="question1" value="5" class="radio-custom hidden">
+                        <div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center hover:border-blue-400 transition-colors">5</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- คำถามข้อที่ 2 -->
+            <div>
+                <label class="block text-gray-700 font-medium mb-3">2. ความรวดเร็วในการให้บริการ</label>
+                <div class="flex justify-between md:justify-start md:space-x-4">
+                    <!-- โค้ดย่อเพื่อความกระชับ: ชินอิจิสามารถคัดลอกโครงสร้างด้านบนมาเปลี่ยน name เป็น question2 ได้เลยค่ะ -->
+                    <label class="cursor-pointer"><input type="radio" name="question2" value="1" class="radio-custom hidden" required><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">1</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question2" value="2" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">2</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question2" value="3" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">3</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question2" value="4" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">4</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question2" value="5" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">5</div></label>
+                </div>
+            </div>
+
+            <!-- คำถามข้อที่ 3 -->
+            <div>
+                <label class="block text-gray-700 font-medium mb-3">3. ความสุภาพและการให้คำแนะนำของพนักงาน</label>
+                <div class="flex justify-between md:justify-start md:space-x-4">
+                    <label class="cursor-pointer"><input type="radio" name="question3" value="1" class="radio-custom hidden" required><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">1</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question3" value="2" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">2</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question3" value="3" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">3</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question3" value="4" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">4</div></label>
+                    <label class="cursor-pointer"><input type="radio" name="question3" value="5" class="radio-custom hidden"><div class="w-10 h-10 md:w-12 md:h-12 border-2 border-gray-300 rounded-full flex items-center justify-center">5</div></label>
+                </div>
+            </div>
+
+            <!-- ส่วนที่ 3: ช่องข้อเสนอแนะ -->
+            <div>
+                <label for="comments" class="block text-gray-700 font-medium mb-2">ข้อเสนอแนะเพิ่มเติม (ถ้ามี)</label>
+                <textarea id="comments" name="comments" rows="4" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors" placeholder="พิมพ์ความคิดเห็นของคุณที่นี่..."></textarea>
+            </div>
+
+            <!-- ปุ่ม Submit -->
+            <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center">
+                <span>ส่งแบบประเมิน</span>
+            </button>
+        </form>
+
+        <!-- ข้อความขอบคุณเมื่อส่งสำเร็จ (ซ่อนไว้ก่อน) -->
+        <div id="successMessage" class="hidden text-center py-8">
+            <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 class="text-2xl font-bold text-gray-800">ขอบคุณสำหรับความคิดเห็นค่ะ!</h2>
+            <p class="text-gray-500 mt-2">เราจะนำข้อมูลไปพัฒนาบริการให้ดียิ่งขึ้น</p>
+        </div>
+    </div>
+
+    <!-- ส่วนของ JavaScript สำหรับเชื่อม API -->
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // ป้องกันไม่ให้หน้าเว็บ Refresh ทันที
+            
+            // 1. นำข้อมูลจากฟอร์มมาเตรียมไว้
+            const formData = new FormData(this);
+            const data = {
+                Timestamp: new Date().toLocaleString('th-TH'), // เวลาที่ประเมิน
+                Q1_Quality: formData.get('question1'),
+                Q2_Speed: formData.get('question2'),
+                Q3_Service: formData.get('question3'),
+                Comments: formData.get('comments')
+            };
+
+            // เปลี่ยนปุ่มเป็นสถานะกำลังโหลด
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = 'กำลังส่งข้อมูล...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-70');
+
+            // 2. ตั้งค่า API Endpoint ของชินอิจิ 
+            // ตัวอย่างเช่น URL จาก SheetDB (https://sheetdb.io/api/v1/xxxxxxx) หรือ Webhook (Make.com)
+            const API_URL = 'ใส่_API_URL_ของชินอิจิตรงนี้ค่ะ';
+
+            // 3. ส่งข้อมูลด้วย Fetch API
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data: [data] }) // รูปแบบ JSON นี้ปรับตามที่ SheetDB หรือ API ร้องขอนะคะ
+            })
+            .then(response => {
+                if(response.ok) {
+                    // ส่งข้อมูลสำเร็จ: ซ่อนฟอร์ม และแสดงข้อความขอบคุณ
+                    document.getElementById('surveyForm').classList.add('hidden');
+                    document.getElementById('successMessage').classList.remove('hidden');
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                // กรณีเกิด Error
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล รบกวนลองใหม่อีกครั้งนะคะ');
+                submitBtn.innerHTML = 'ส่งแบบประเมิน';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70');
+            });
+        });
+    </script>
+</body>
+</html>
