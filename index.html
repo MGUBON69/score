@@ -14,34 +14,52 @@
             border-color: #3b82f6;
         }
 
-        /* เอฟเฟกต์โลโก้เรืองแสงเป็นระยะ (Glowing Effect) */
-        @keyframes logoGlow {
+        /* เอฟเฟกต์แสงสีฟ้าอ่อนเคลื่อนไหวและสว่างจางลงเป็นระยะ */
+        @keyframes blueGlowOne {
             0%, 100% {
-                filter: drop-shadow(0 0 2px rgba(59, 130, 246, 0));
-                transform: scale(1);
+                opacity: 0.15;
+                transform: scale(0.85) translate(0, 0);
             }
             50% {
-                /* ปรับสีเรืองแสงและความฟุ้งได้ที่นี่ (RGBA: ฟ้าสดใส + ขยายขึ้นเล็กน้อย) */
-                filter: drop-shadow(0 0 16px rgba(59, 130, 246, 0.8));
-                transform: scale(1.02);
+                opacity: 0.65;
+                transform: scale(1.15) translate(20px, -20px);
             }
         }
 
-        .logo-glow {
-            /* วนลูปทำงานทุกๆ 3 วินาที แบบนุ่มนวลตลอดเวลา */
-            animation: logoGlow 3s ease-in-out infinite;
+        @keyframes blueGlowTwo {
+            0%, 100% {
+                opacity: 0.60;
+                transform: scale(1.1) translate(0, 0);
+            }
+            50% {
+                opacity: 0.10;
+                transform: scale(0.8) translate(-20px, 20px);
+            }
+        }
+
+        .glow-spot-1 {
+            animation: blueGlowOne 8s ease-in-out infinite;
+        }
+
+        .glow-spot-2 {
+            animation: blueGlowTwo 10s ease-in-out infinite;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-white min-h-screen flex items-center justify-center p-4 relative overflow-x-hidden">
+
+    <!-- พื้นหลังแสงสีฟ้าอ่อนลอยเป็นระยะ (Ambient Blue Glow Elements) -->
+    <div class="fixed inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden">
+        <div class="glow-spot-1 absolute w-[500px] h-[500px] bg-blue-200/60 rounded-full filter blur-[100px] -top-20 -left-20"></div>
+        <div class="glow-spot-2 absolute w-[600px] h-[600px] bg-sky-200/50 rounded-full filter blur-[120px] -bottom-20 -right-20"></div>
+    </div>
 
     <!-- Container หลักของแบบประเมิน -->
-    <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 w-full max-w-2xl">
+    <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-10 w-full max-w-2xl relative z-10 border border-blue-50">
         
         <!-- ส่วนที่ 1: โลโก้และหัวข้อ -->
         <div class="text-center mb-8">
-            <!-- เพิ่ม class logo-glow ที่แท็ก img -->
-            <img src="icon2.png" alt="Company Logo" class="h-36 mx-auto object-contain logo-glow">
+            <img src="icon2.png" alt="Company Logo" class="h-36 mx-auto object-contain">
             <h1 class="text-2xl font-bold text-gray-800 mt-4">แบบประเมินความพึงพอใจ</h1>
             <p class="text-gray-500 text-sm mt-2">ความคิดเห็นของคุณมีความสำคัญต่อเราในการพัฒนาบริการให้ดียิ่งขึ้น</p>
         </div>
@@ -107,7 +125,7 @@
             </div>
 
             <!-- ปุ่ม Submit -->
-            <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center">
+            <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center shadow-md hover:shadow-lg">
                 <span>ส่งแบบประเมิน</span>
             </button>
         </form>
@@ -122,7 +140,7 @@
         </div>
     </div>
 
-    <!-- ส่วน JavaScript พร้อมระบบตรวจจับ Error ดึงการตอบกลับจาก Server -->
+    <!-- ส่วน JavaScript -->
     <script>
         document.getElementById('surveyForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -161,7 +179,6 @@
                     document.getElementById('surveyForm').classList.add('hidden');
                     document.getElementById('successMessage').classList.remove('hidden');
                 } else {
-                    // หากเกิด Error ฝั่ง SheetDB ให้ดึงข้อความจาก Server มาโชว์
                     console.error('SheetDB Error Response:', resData);
                     const errorMsg = resData.error || resData.message || 'ไม่สามารถบันทึกข้อมูลได้ (HTTP Status ' + response.status + ')';
                     throw new Error(errorMsg);
