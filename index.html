@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แบบประเมินความพึงพอใจ</title>
-    <!-- Tailwind CSS ผ่าน CDN สำหรับทำ UI ให้สวยงามทันสมัย -->
+    <!-- Tailwind CSS ผ่าน CDN สำหรับทำ UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* สไตล์สำหรับปุ่มวิทยุ (Radio Options) เมื่อถูกเลือก */
         .radio-custom:checked + div {
-            background-color: #3b82f6; /* สีฟ้า Tailwind (blue-500) */
+            background-color: #3b82f6;
             color: white;
             border-color: #3b82f6;
         }
@@ -103,15 +103,14 @@
         </div>
     </div>
 
-    <!-- ส่วนของ JavaScript สำหรับยิง API -->
+    <!-- ส่วน JavaScript พร้อมระบบตรวจจับ Error ดึงการตอบกลับจาก Server -->
     <script>
         document.getElementById('surveyForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // 1. ดึงข้อมูลจากฟอร์ม
             const formData = new FormData(this);
             
-            // หมายเหตุ: ชื่อ Key ด้านซ้ายมือ ต้องตรงกับ Header แถวแรกใน Google Sheets
+            // เตรียม Payload ส่งไปยัง SheetDB
             const payloadData = {
                 Timestamp: new Date().toLocaleString('th-TH'),
                 Q1_Sales: formData.get('question1'),
@@ -120,16 +119,13 @@
                 Comments: formData.get('comments') || '-'
             };
 
-            // แสดงสถานะกำลังส่งบนปุ่ม
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.innerHTML = 'กำลังส่งข้อมูล...';
             submitBtn.disabled = true;
             submitBtn.classList.add('opacity-70');
 
-            // 2. นำ API URL ที่ได้จาก SheetDB มาวางในอัญประกาศตรงนี้ค่ะ
             const API_URL = 'https://sheetdb.io/api/v1/dqzie2gijxg33';
 
-            // 3. ยิง HTTP POST Request ไปที่ SheetDB
             fetch(API_URL, {
                 method: 'POST',
                 headers: {
@@ -138,18 +134,25 @@
                 },
                 body: JSON.stringify({ data: [payloadData] })
             })
-            .then(response => {
-                if(response.ok) {
-                    // ส่งข้อมูลสำเร็จ
+            .then(async (response) => {
+                const resData = await response.json().catch(() => ({}));
+                
+                if (response.ok) {
+                    // บันทึกสำเร็จ
                     document.getElementById('surveyForm').classList.add('hidden');
                     document.getElementById('successMessage').classList.remove('hidden');
                 } else {
-                    throw new Error('ไม่สามารถบันทึกข้อมูลได้');
+                    // หากเกิด Error ฝั่ง SheetDB ให้ดึงข้อความจาก Server มาโชว์
+                    console.error('SheetDB Error Response:', resData);
+                    const errorMsg = resData.error || resData.message || 'ไม่สามารถบันทึกข้อมูลได้ (HTTP Status ' + response.status + ')';
+                    throw new Error(errorMsg);
                 }
             })
             .catch(error => {
-                console.error('API Error:', error);
-                alert('เกิดข้อผิดพลาดในการส่งข้อมูล รบกวนลองใหม่อีกครั้งนะคะ');
+                console.error('API Error Details:', error);
+                alert('เกิดข้อผิดพลาด: ' + error.message + '\n\nคำแนะนำ: กรุณาเช็กชื่อ Header ใน Google Sheets แถวแรก ให้ตรงกับ Timestamp, Q1_Sales, Q2_CarPrep, Q3_Overall, Comments ค่ะ');
+                
+                // คืนค่าปุ่มให้กดใหม่ได้
                 submitBtn.innerHTML = 'ส่งแบบประเมิน';
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('opacity-70');
