@@ -13,6 +13,24 @@
             color: white;
             border-color: #3b82f6;
         }
+
+        /* เอฟเฟกต์โลโก้เรืองแสงเป็นระยะ (Glowing Effect) */
+        @keyframes logoGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 2px rgba(59, 130, 246, 0));
+                transform: scale(1);
+            }
+            50% {
+                /* ปรับสีเรืองแสงและความฟุ้งได้ที่นี่ (RGBA: ฟ้าสดใส + ขยายขึ้นเล็กน้อย) */
+                filter: drop-shadow(0 0 16px rgba(59, 130, 246, 0.8));
+                transform: scale(1.02);
+            }
+        }
+
+        .logo-glow {
+            /* วนลูปทำงานทุกๆ 3 วินาที แบบนุ่มนวลตลอดเวลา */
+            animation: logoGlow 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
@@ -22,7 +40,8 @@
         
         <!-- ส่วนที่ 1: โลโก้และหัวข้อ -->
         <div class="text-center mb-8">
-            <img src="icon2.png" alt="Company Logo" class="h-36 mx-auto object-contain">
+            <!-- เพิ่ม class logo-glow ที่แท็ก img -->
+            <img src="icon2.png" alt="Company Logo" class="h-36 mx-auto object-contain logo-glow">
             <h1 class="text-2xl font-bold text-gray-800 mt-4">แบบประเมินความพึงพอใจ</h1>
             <p class="text-gray-500 text-sm mt-2">ความคิดเห็นของคุณมีความสำคัญต่อเราในการพัฒนาบริการให้ดียิ่งขึ้น</p>
         </div>
