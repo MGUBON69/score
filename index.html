@@ -67,6 +67,19 @@
         <!-- ส่วนที่ 2: ฟอร์มแบบประเมิน -->
         <form id="surveyForm" class="space-y-6">
             
+            <!-- ส่วนเพิ่มใหม่: เลือกที่ปรึกษาการขาย (เซลล์) -->
+            <div>
+                <label for="salesPerson" class="block text-gray-700 font-medium mb-2">ระบุชื่อที่ปรึกษาการขาย (เซลล์)</label>
+                <select id="salesPerson" name="salesPerson" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors bg-white">
+                    <option value="" disabled selected>-- กรุณาเลือกชื่อที่ปรึกษาการขาย --</option>
+                    <option value="เซลล์ สมชาย (A)">เซลล์ ดรีม (A)</option>
+                    <option value="เซลล์ สมหญิง (B)">เซลล์ เบิร์ท (B)</option>
+                    <option value="เซลล์ กิตติ (C)">เซลล์ ต้อม (C)</option>
+                    <option value="เซลล์ นภา (D)">เซลล์ เอิร์ท (D)</option>
+                    <option value="เซลล์ ชัยชนะ (E)">เซลล์ ปูนื่ม (E)</option>
+                </select>
+            </div>
+
             <!-- ข้อที่ 1: ที่ปรึกษาการขาย -->
             <div>
                 <label class="block text-gray-700 font-medium mb-3">1. ความพึงพอใจในการให้บริการของที่ปรึกษาการขาย</label>
@@ -147,13 +160,13 @@
             
             const formData = new FormData(this);
             
-            // เตรียม Payload ส่งไปยัง SheetDB
+            // เตรียมข้อมูลส่งไปยัง Google Apps Script
             const payloadData = {
-                Timestamp: new Date().toLocaleString('th-TH'),
-                Q1_Sales: formData.get('question1'),
-                Q2_CarPrep: formData.get('question2'),
-                Q3_Overall: formData.get('question3'),
-                Comments: formData.get('comments') || '-'
+                salesPerson: formData.get('salesPerson'),
+                question1: formData.get('question1'),
+                question2: formData.get('question2'),
+                question3: formData.get('question3'),
+                comments: formData.get('comments') || '-'
             };
 
             const submitBtn = document.getElementById('submitBtn');
@@ -161,34 +174,29 @@
             submitBtn.disabled = true;
             submitBtn.classList.add('opacity-70');
 
-            const API_URL = 'https://sheetdb.io/api/v1/dqzie2gijxg33';
+            // ใส่ Web App URL ของ Google Apps Script ที่ Deploy แล้วตรงนี้
+            const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyAmpbKF4-slA4QCSXYkntFE_Dkx1S3fWFp9WE_yU4Wd9zgOaCVwQzRtMpkJS_L48h4/exec';
 
-            fetch(API_URL, {
+            fetch(WEB_APP_URL, {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain;charset=utf-8'
                 },
-                body: JSON.stringify({ data: [payloadData] })
+                body: JSON.stringify(payloadData)
             })
-            .then(async (response) => {
-                const resData = await response.json().catch(() => ({}));
-                
-                if (response.ok) {
-                    // บันทึกสำเร็จ
+            .then(response => response.json())
+            .then(resData => {
+                if (resData.status === 'success') {
                     document.getElementById('surveyForm').classList.add('hidden');
                     document.getElementById('successMessage').classList.remove('hidden');
                 } else {
-                    console.error('SheetDB Error Response:', resData);
-                    const errorMsg = resData.error || resData.message || 'ไม่สามารถบันทึกข้อมูลได้ (HTTP Status ' + response.status + ')';
-                    throw new Error(errorMsg);
+                    throw new Error(resData.message || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
                 }
             })
             .catch(error => {
                 console.error('API Error Details:', error);
-                alert('เกิดข้อผิดพลาด: ' + error.message + '\n\nคำแนะนำ: กรุณาเช็กชื่อ Header ใน Google Sheets แถวแรก ให้ตรงกับ Timestamp, Q1_Sales, Q2_CarPrep, Q3_Overall, Comments ค่ะ');
+                alert('เกิดข้อผิดพลาด: ' + error.message);
                 
-                // คืนค่าปุ่มให้กดใหม่ได้
                 submitBtn.innerHTML = 'ส่งแบบประเมิน';
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('opacity-70');
